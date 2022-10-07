@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.example.instagramclone.fragment.HomeFragment;
+import com.example.instagramclone.fragment.ProfileFragment;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -37,26 +40,22 @@ public class LoginActivity extends AppCompatActivity {
          EditText etPassword;
          Button btnLog;
          Button btnSignUp;
-         ImageView ivLogo;
-        Context context;
+
 
         etUserLog = findViewById(R.id.etUserName);
         etPassword = findViewById(R.id.etPassword);
         btnLog = findViewById(R.id.btnLog);
         btnSignUp = findViewById(R.id.btnSignUp);
-        ivLogo = findViewById(R.id.ivLogo);
 
-//        Glide.with(this)
-//                .load(R.drawable.insta_logo)
-//                .into(ivLogo);
+
 
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick button");
                 String username = etUserLog.getText().toString();
-                String passsword = etPassword.getText().toString();
-                loginUser(username, passsword);
+                String password = etPassword.getText().toString();
+                loginUser(username, password);
             }
         });
 
@@ -81,12 +80,12 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if(e != null){
                     Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(LoginActivity.this, "Incorrect username or password", Toast.LENGTH_SHORT);
+                    Toast.makeText(LoginActivity.this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Go to the main activity
                 goMainActivity();
-                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT);
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -114,11 +113,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void goMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void showEditDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        HomeFragment homeFragment = HomeFragment.newInstance("Home");
+        homeFragment.show(fragmentManager, "fragment_home");
     }
 }
